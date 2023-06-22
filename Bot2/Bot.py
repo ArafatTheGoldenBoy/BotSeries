@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def main():
-    proxy = "14.231.161.89:8080"  # or 14.139.172.170:3128
+    proxy = "14.231.161.89:8080"  # desired proxy ip with port
     options = Options()
     options.add_experimental_option("detach", True)
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -17,7 +17,7 @@ def main():
     driver = webdriver.Chrome(
         service=ChromeService(ChromeDriverManager().install()), options=options
     )
-    driver.get("https://whatismyipaddress.com/")
+    driver.get("https://www.showmyip.com/")
 
     # driver.close()
 
