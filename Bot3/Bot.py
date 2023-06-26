@@ -5,6 +5,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # need to install webdriver manager
 
@@ -23,9 +27,9 @@ def main():
     driver.get("https://visa.vfsglobal.com/ind/en/deu/login")
     driver.implicitly_wait(50000)
     user = driver.find_element(By.ID, "mat-input-0")
-    user.send_keys("yasinarafat3.de@gmail.com" + Keys.RETURN)
+    user.send_keys(os.getenv("EMAIL") + Keys.RETURN)
     pass2 = driver.find_element(By.ID, "mat-input-1")
-    pass2.send_keys("U8vZv9NW9$5iwF!" + Keys.RETURN)
+    pass2.send_keys(os.getenv("PASSWORD") + Keys.RETURN)
     time.sleep(5000)
     login = driver.find_element(
         By.CLASS_NAME,
