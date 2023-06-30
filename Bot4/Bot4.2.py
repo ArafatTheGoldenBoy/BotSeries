@@ -6,15 +6,14 @@ from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium_recaptcha_solver import RecaptchaSolver
 import time
 import os
 from dotenv import load_dotenv
-from twocaptcha import TwoCaptcha
 
 load_dotenv()
 sitekey = "6Le-wvkSAAAAAPBMRTvw0Q4Muexq9bi0DJwx_mJ-"
 url = "https://www.google.com/recaptcha/api2/demo"
-solver = TwoCaptcha(os.getenv("API"))
 
 
 # need to install webdriver manager
@@ -28,28 +27,17 @@ def main():
         service=ChromeService(ChromeDriverManager().install()), options=options
     )
     driver.get(url)
-    driver.implicitly_wait(50000)
-    result = solver.recaptcha(sitekey, url)
-    print(result["code"])
-    """
-    WebDriverWait(driver, 120).until(
-        EC.element_to_be_clickable(
-            (
-                By.XPATH,
-                '//*[@id="recaptcha-demo"]/div/div/iframe',
-            )
-        )
-    ).click()
-    """
-    driver.execute_script(
-        "document.getElementById('g-recaptcha-response').innerHTML = "
-        + "'"
-        + result["code"]
-        + "'"
-    )
+    solve = RecaptchaSolver(driver)
     time.sleep(3)
+    iframe = driver.find_element(
+        By.XPATH,
+        '//*[@id="recaptcha-demo"]/div/div/iframe',
+    )
+    solve.click_recaptcha_v2(iframe)
+    # solve.solve_recaptcha_v2_challenge(iframe)
+    time.sleep(20)
     driver.find_element(By.ID, "recaptcha-demo-submit").click()
-    time.sleep(2)
+
     # driver.close()
 
 
